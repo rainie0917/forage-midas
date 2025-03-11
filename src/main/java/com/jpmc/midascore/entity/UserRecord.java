@@ -6,8 +6,8 @@ import jakarta.persistence.*;
 public class UserRecord {
 
     @Id
-    @GeneratedValue()
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -15,19 +15,17 @@ public class UserRecord {
     @Column(nullable = false)
     private float balance;
 
+    // Default constructor required by JPA
     protected UserRecord() {
     }
 
+    // Parameterized constructor for creating instances
     public UserRecord(String name, float balance) {
         this.name = name;
         this.balance = balance;
     }
 
-    @Override
-    public String toString() {
-        return String.format("User[id=%d, name='%s', balance='%f'", id, name, balance);
-    }
-
+    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -36,11 +34,23 @@ public class UserRecord {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public float getBalance() {
         return balance;
     }
 
     public void setBalance(float balance) {
+        if (balance < 0) {
+            throw new IllegalArgumentException("Balance cannot be negative");
+        }
         this.balance = balance;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("User[id=%d, name='%s', balance='%f']", id, name, balance);
     }
 }

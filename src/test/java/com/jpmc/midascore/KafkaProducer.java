@@ -17,6 +17,11 @@ public class KafkaProducer {
 
     public void send(String transactionLine) {
         String[] transactionData = transactionLine.split(", ");
-        kafkaTemplate.send(topic, new Transaction(Long.parseLong(transactionData[0]), Long.parseLong(transactionData[1]), Float.parseFloat(transactionData[2])));
+        Transaction transaction = new Transaction(
+            Long.parseLong(transactionData[0]), // senderId
+            Long.parseLong(transactionData[1]), // recipientId
+            Float.parseFloat(transactionData[2]) // amount
+        );
+        kafkaTemplate.send(topic, transaction);
     }
 }
